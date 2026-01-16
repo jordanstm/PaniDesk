@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 PANIDESK - O Desktop Remoto que é PANO pra MAMÃO!</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Barra de navegação -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <span style="font-size: 1.5rem; margin-right: 0.5rem;">💻</span>
+            <span style="font-weight: 800; letter-spacing: -1px;">PANIDESK</span>
+            <span style="font-size: 0.7rem; opacity: 0.7; margin-left: 0.25rem;">BETA</span>
+        </div>
+        <div class="nav-menu">
+            <button class="nav-btn active" data-section="connections">
+                <i class="fas fa-plug"></i>
+                <span>Conexões</span>
+            </button>
+            <button class="nav-btn" data-section="remote-control">
+                <i class="fas fa-tv"></i>
+                <span>Controle Remoto</span>
+            </button>
+            <button class="nav-btn" data-section="file-transfer">
+                <i class="fas fa-file-export"></i>
+                <span>Arquivos</span>
+            </button>
+            <button class="nav-btn" data-section="chat">
+                <i class="fas fa-comments"></i>
+                <span>Chat</span>
+            </button>
+            <button class="nav-btn" data-section="settings">
+                <i class="fas fa-cog"></i>
+                <span>Configurações</span>
+            </button>
+        </div>
+        <div class="nav-status">
+            <div class="status-indicator" id="connectionStatus">
+                <span class="status-dot"></span>
+                <span class="status-text">Offline</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Conteúdo principal -->
+    <main class="main-content">
+        <!-- Seção de Conexões -->
+        <section id="connections" class="content-section active">
+            <div class="section-header">
+                <h2><i class="fas fa-plug"></i> Conexões</h2>
+                <div class="header-actions">
+                    <button class="btn btn-primary" id="connectBtn">
+                        <i class="fas fa-plus"></i>
+                        Nova Conexão
+                    </button>
+                    <button class="btn btn-secondary" id="refreshBtn">
+                        <i class="fas fa-sync-alt"></i>
+                        Atualizar
+                    </button>
+                </div>
+            </div>
+            
+            <div class="connection-info">
+                <div class="info-card">
+                    <h3>Seu ID</h3>
+                    <div class="client-id-display">
+                        <span id="clientId">Carregando...</span>
+                        <button class="btn-icon" id="copyIdBtn" title="Copiar ID">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <h3>Status do Servidor</h3>
+                    <div class="server-status">
+                        <span id="serverStatus">Conectando...</span>
+                        <button class="btn btn-secondary" id="serverSettingsBtn">
+                            Configurar Servidor
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="clients-list">
+                <h3>Clientes Disponíveis</h3>
+                <div id="clientsList" class="clients-grid">
+                    <div class="no-clients">
+                        <i class="fas fa-users-slash"></i>
+                        <p>Nenhum cliente conectado</p>
+                        <small>Aguardando conexões...</small>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de Controle Remoto -->
+        <section id="remote-control" class="content-section">
+            <div class="section-header">
+                <h2><i class="fas fa-tv"></i> Controle Remoto</h2>
+                <div class="header-actions">
+                    <button class="btn btn-primary" id="startRemoteBtn" disabled>
+                        <i class="fas fa-play"></i>
+                        Iniciar Controle
+                    </button>
+                    <button class="btn btn-danger" id="stopRemoteBtn" disabled>
+                        <i class="fas fa-stop"></i>
+                        Parar
+                    </button>
+                </div>
+            </div>
+            
+            <div class="remote-control-container">
+                <div class="remote-info" id="remoteInfo">
+                    <i class="fas fa-info-circle"></i>
+                    <p>Conecte-se a um cliente para iniciar o controle remoto</p>
+                </div>
+                
+                <div class="remote-viewer" id="remoteViewer" style="display: none;">
+                    <canvas id="remoteCanvas" width="800" height="600"></canvas>
+                    <div class="remote-controls">
+                        <div class="control-group">
+                            <label>Qualidade:</label>
+                            <select id="qualitySelect">
+                                <option value="low">Baixa</option>
+                                <option value="medium" selected>Média</option>
+                                <option value="high">Alta</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label>Escala:</label>
+                            <input type="range" id="scaleRange" min="25" max="150" value="100">
+                            <span id="scaleValue">100%</span>
+                        </div>
+                        <button class="btn btn-secondary" id="fullscreenBtn">
+                            <i class="fas fa-expand"></i>
+                            Tela Cheia
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de Transferência de Arquivos -->
+        <section id="file-transfer" class="content-section">
+            <div class="section-header">
+                <h2><i class="fas fa-file-export"></i> Transferência de Arquivos</h2>
+                <div class="header-actions">
+                    <button class="btn btn-primary" id="sendFileBtn" disabled>
+                        <i class="fas fa-upload"></i>
+                        Enviar Arquivo
+                    </button>
+                    <button class="btn btn-secondary" id="receiveFileBtn" disabled>
+                        <i class="fas fa-download"></i>
+                        Receber Arquivo
+                    </button>
+                </div>
+            </div>
+            
+            <div class="file-transfer-container">
+                <div class="transfer-section">
+                    <h3>Arquivos Enviados</h3>
+                    <div id="sentFiles" class="files-list">
+                        <div class="no-files">
+                            <i class="fas fa-file-upload"></i>
+                            <p>Nenhum arquivo enviado</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="transfer-section">
+                    <h3>Arquivos Recebidos</h3>
+                    <div id="receivedFiles" class="files-list">
+                        <div class="no-files">
+                            <i class="fas fa-file-download"></i>
+                            <p>Nenhum arquivo recebido</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de Chat -->
+        <section id="chat" class="content-section">
+            <div class="section-header">
+                <h2><i class="fas fa-comments"></i> Chat</h2>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" id="clearChatBtn">
+                        <i class="fas fa-trash"></i>
+                        Limpar
+                    </button>
+                </div>
+            </div>
+            
+            <div class="chat-container">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="chat-welcome">
+                        <i class="fas fa-comments"></i>
+                        <p>Inicie uma conversa com um cliente conectado</p>
+                    </div>
+                </div>
+                
+                <div class="chat-input-container">
+                    <div class="chat-input">
+                        <input type="text" id="chatInput" placeholder="Digite sua mensagem..." disabled>
+                        <button id="sendMessageBtn" disabled>
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de Configurações -->
+        <section id="settings" class="content-section">
+            <div class="section-header">
+                <h2><i class="fas fa-cog"></i> Configurações</h2>
+            </div>
+            
+            <div class="settings-container">
+                <div class="settings-section">
+                    <h3>Servidor</h3>
+                    <div class="setting-item">
+                        <label for="serverUrl">URL do Servidor:</label>
+                        <input type="text" id="serverUrl" value="http://localhost:3001">
+                    </div>
+                    <div class="setting-item">
+                        <label for="autoConnect">Conectar automaticamente:</label>
+                        <input type="checkbox" id="autoConnect" checked>
+                    </div>
+                </div>
+                
+                <div class="settings-section">
+                    <h3>Controle Remoto</h3>
+                    <div class="setting-item">
+                        <label for="remoteQuality">Qualidade padrão:</label>
+                        <select id="remoteQuality">
+                            <option value="low">Baixa</option>
+                            <option value="medium" selected>Média</option>
+                            <option value="high">Alta</option>
+                        </select>
+                    </div>
+                    <div class="setting-item">
+                        <label for="remoteScale">Escala padrão:</label>
+                        <input type="range" id="remoteScale" min="25" max="150" value="100">
+                        <span id="remoteScaleValue">100%</span>
+                    </div>
+                </div>
+                
+                <div class="settings-section">
+                    <h3>Segurança</h3>
+                    <div class="setting-item">
+                        <label for="requirePassword">Exigir senha para conexão:</label>
+                        <input type="checkbox" id="requirePassword">
+                    </div>
+                    <div class="setting-item" id="passwordField" style="display: none;">
+                        <label for="connectionPassword">Senha de conexão:</label>
+                        <input type="password" id="connectionPassword">
+                    </div>
+                </div>
+                
+                <div class="settings-actions">
+                    <button class="btn btn-primary" id="saveSettingsBtn">
+                        <i class="fas fa-save"></i>
+                        Salvar Configurações
+                    </button>
+                    <button class="btn btn-secondary" id="resetSettingsBtn">
+                        <i class="fas fa-undo"></i>
+                        Restaurar Padrões
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal de Conexão -->
+    <div id="connectionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Nova Conexão</h3>
+                <button class="modal-close" id="closeModalBtn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="targetId">ID do Cliente:</label>
+                    <input type="text" id="targetId" placeholder="Digite o ID do cliente">
+                </div>
+                <div class="form-group">
+                    <label for="connectionName">Nome da Conexão (opcional):</label>
+                    <input type="text" id="connectionName" placeholder="Nome personalizado">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelConnectionBtn">Cancelar</button>
+                <button class="btn btn-primary" id="confirmConnectionBtn">Conectar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Configurações do Servidor -->
+    <div id="serverModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Configurar Servidor</h3>
+                <button class="modal-close" id="closeServerModalBtn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="modalServerUrl">URL do Servidor:</label>
+                    <input type="text" id="modalServerUrl" value="http://localhost:3001">
+                </div>
+                <div class="form-group">
+                    <label for="testConnection">Testar Conexão:</label>
+                    <button class="btn btn-secondary" id="testConnectionBtn">Testar</button>
+                    <span id="testResult"></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelServerBtn">Cancelar</button>
+                <button class="btn btn-primary" id="saveServerBtn">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/crypto.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/remote-control.js"></script>
+    <script src="js/file-transfer.js"></script>
+    <script src="js/chat.js"></script>
+</body>
+</html>
